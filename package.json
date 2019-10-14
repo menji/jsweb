@@ -1,0 +1,29 @@
+{
+    "name": "jsweb",
+    "version": "1.0.0",
+    "description": "javascript web framework",
+    "main": "client.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "standardx --fix"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/menji/jsweb.git"
+    },
+    "keywords": [],
+    "author": "Henry Zhou",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/menji/jsweb/issues"
+    },
+    "eslintConfig": {
+        "rules": {
+            "indent": ["error", 4]
+        }
+    },
+    "homepage": "https://github.com/menji/jsweb#readme",
+    "dependencies": {
+        "standardx": "^5.0.0"
+    }
+}
