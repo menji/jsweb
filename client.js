@@ -21,8 +21,8 @@ const request = function (host, port, callback) {
 }
 
 const __main = function () {
-    const host = 'www.google.cn'
-    const port = 80
+    const host = 'localhost'
+    const port = 2000
     request(host, port, log)
 }
 __main()
