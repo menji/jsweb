@@ -2,8 +2,21 @@ const net = require("net");
 const log = function (...arg) { console.log.apply(console, arguments) }
 
 const handleRequest = function(data, socket) {
-    log('client data', data);
-    socket.write("goodbye!!!");
+    const str = String(data)
+    log('client data\n', str);
+    const html = `<!DOCTYPE html>
+    <html lang="en" dir="ltr">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title></title>
+        </head>
+        <body>
+            中文, 你好
+        </body>
+    </html>`
+    const response = `HTTP/1.1 200 Success\r\nHOST: localhost\r\n\r\n${html}`
+    socket.write(response);
     socket.end();
 }
 
@@ -25,7 +38,7 @@ const httpServer = function(handleRequest) {
 
     });
 
-    server.on("listening", function() {
+    server.on("listening", function(data) {
         log("listening...");
     });
 
@@ -47,13 +60,13 @@ const hostServer = function(config) {
         handleRequest,
         handleError,
     )
-    log('created server', server)
+    // log('created server', server)
     server.listen(config);
 }
 
 const __main = function() {
     const config = {
-        port: 2000,
+        port: 3000,
         host: "127.0.0.1",
         exclusive: true,
     }
