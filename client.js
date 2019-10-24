@@ -4,16 +4,6 @@ const log = function (...arg) { console.log.apply(console, arguments) }
 // const fs = require('fs')
 const assert = require('assert');
 
-// get protocol of url
-const protocolOfUrl = function(url) {
-    const arr = url.split('://')
-    let p = 'http'
-    if(arr[0] === 'https') {
-        p = arr[0]
-    }
-    return p
-}
-
 // get protocol, host, port, path from url
 const parsedUrl = function(url) {
     const protocols = ['http', 'https']
