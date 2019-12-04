@@ -1,5 +1,6 @@
 
 const net = require('net')
+const tls = require('tls');
 const log = function (...arg) { console.log.apply(console, arguments) }
 // const fs = require('fs')
 const assert = require('assert');
