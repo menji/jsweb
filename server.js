@@ -19,7 +19,7 @@ class Request {
         this.cookies = {}
     }
 
-    addCookies(){
+    addCookies() {
         // Cookie: __ncuid=67d18f55-00d6-485d-8fed-413dcab382ae; _ga=GA1.1.800929821.1574731206; CMXID=800929821.1574731206
         const cookies = _.get(this.headers, 'Cookie', '')
         const kvs = cookies.split('; ')
@@ -32,11 +32,25 @@ class Request {
         }
     }
 
+    stringifiedCookies() {
+        const a = []
+        for (const k of Object.keys(this.cookies)) {
+            const c = `${k}=${this.cookies[k]}`
+            a.push(c)
+        }
+        return a.join('; ')
+    }
+
+    appendCookies(key, value) {
+        this.cookies[key] = value
+    }
+
+
     addHeaders(header) {
         const lines = header
         for(const line of lines) {
             const [k, v] = line.split(': ')
-            this.headers[k] = v
+            this.headers[k] = line.slice(k.length)
         }
 
         this.cookies = {}
@@ -103,6 +117,7 @@ const error = function(request, code=404) {
 
 const responseForPath = function(reqPath) {
     const {path, query} = parsedPath(reqPath)
+    request.query = query
     let r = {
         '/static': routeStatic,
     }
@@ -180,7 +195,7 @@ const hostServer = function(config) {
 
 const __main = function() {
     const config = {
-        port: 6666,
+        port: 3300,
         host: "127.0.0.1",
         exclusive: true,
     }

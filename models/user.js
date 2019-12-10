@@ -9,6 +9,7 @@ class User extends Model {
         super()
         this.username = form.username
         this.password = form.password
+        this.note = form.note
     }
 
     validateRegister() {

@@ -40,6 +40,20 @@ class Model {
         return ms
     }
 
+    static findBy(cls, condition) {
+        const path = Model.dbPath(cls)
+        // const cls = this.constructor.name
+        const models = load(path)
+        const k = Object.keys(condition).slice(-1)
+        const v = condition[k]
+        for (const m of models) {
+            if (m[k] === v) {
+                return m
+            }
+        }
+        return null
+    }
+
     static beautifyAll(cls) {
         const ms = Model.all(cls)
         const s = JSON.stringify(ms, null, 4)
