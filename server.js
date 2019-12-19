@@ -6,6 +6,10 @@ const {
     routeStatic,
     routeDict,
 } = require('./routes.js')
+const {
+    todoRouteDict,
+} = require('./routesTodo.js')
+
 
 const log = function (...arg) { console.log.apply(console, arguments) }
 
@@ -124,6 +128,7 @@ const responseForPath = function(reqPath) {
     r = {
         ...r,
         ...routeDict,
+        ...todoRouteDict,
     }
     const response = _.get(r, path, error)
     return response(request)

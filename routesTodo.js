@@ -3,6 +3,7 @@ const _ = require("lodash")
 const fs = require('fs')
 const Model = require('./models/model.js')
 const User = require('./models/user.js')
+const Todo = require('./models/todo.js')
 const log = function (...arg) { console.log.apply(console, arguments) }
 
 const session = {
@@ -56,14 +57,21 @@ const routeStatic = function(request) {
 }
 
 const routeIndex = function(request) {
-    const header = `HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n`
-    let body = page('index.html')
-    const u = currentUser(request)
-    let username = '[Unlogged user]'
-    if (u !== null) {
-        username = u.username
+    const headers = {
+        'Content-Type': 'text/html',
     }
-    body = body.replace('{{user}}', username)
+
+    let body = page('todo_index.html')
+    // const u = currentUser(request)
+    // let username = '[Unlogged user]'
+    // if (u !== null) {
+    //     username = u.username
+    // }
+    //
+    const ms = Model.all(Todo)
+    const result = todoTemplate(ms)
+    body = body.replace('{{result}}', result)
+    const header = stringifiedHeader(headers)
     const r = header + '\r\n' + body
     return r
 }
@@ -92,43 +100,20 @@ const routeRegister = function(request) {
     return r
 }
 
-const routeLogin = function(request) {
-    let result = ''
-    const headers = {
-        'Content-Type': 'text/html',
-    }
-    if(request.method == 'POST') {
-        const form = request.form()
-        const u = Model.new(User, form)
-        if(u.validateLogin()) {
-            result = 'login success'
-            const sessionId = randomStr()
-            const _u = Model.findBy(User, {username: u.username})
-            session[sessionId] = _u
-            // request.appendCookies('user', sessionId)
-            // const c = request.stringifiedCookies()
-            headers['Set-Cookie'] = `cus=${sessionId}`
-            const query = request.query
-            log('查询', query)
-            // const reffer = requestReffer(request)
-            let reffer = query.reffer
-            log('登陆成功 reffer 哈哈', reffer)
-            if (reffer !== undefined) {
-                log('要挑转', reffer)
-                reffer = '/' + reffer
-                return redictTo(reffer, headers)
-            }
+const todoTemplate = function(todos) {
+    let t = todos.map((todo) => {
+       return `<p>${todo.title}</p>`
+    })
+    t = t.join(' ')
+    return t
+}
 
-        } else {
-            result = 'login failed'
-        }
-    }
-    let body = page('login.html')
-    body = body.replace('{{result}}', result)
-    const header = stringifiedHeader(headers)
-    log('新的头部', header)
-    const r = header + '\r\n' + body
-    return r
+const addTodo = function(request) {
+    const form = request.form()
+    const m = Model.new(Todo, form)
+    m.save()
+    const path = '/todo'
+    return redictTo(path)
 }
 
 const routeMsg = function(request) {
@@ -205,12 +190,8 @@ const page = function (name) {
 }
 
 module.exports = {
-    routeStatic,
-    routeDict: {
-        '/': routeIndex,
-        '/msg': routeMsg,
-        '/register': routeRegister,
-        '/login': routeLogin,
-        '/profile': routeProfile,
+    todoRouteDict: {
+        '/todo': routeIndex,
+        '/add_todo': addTodo,
     }
 }

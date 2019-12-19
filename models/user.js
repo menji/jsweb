@@ -13,7 +13,7 @@ class User extends Model {
     }
 
     validateRegister() {
-        const v = this.username.length > 2 && this.password.length > 2
+        const v = this.username.length >= 2 && this.password.length > 2
         return v
     }
 
