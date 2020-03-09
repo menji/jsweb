@@ -1,4 +1,3 @@
-
 const _ = require("lodash")
 const fs = require('fs')
 const Model = require('./models/model.js')
@@ -80,6 +79,7 @@ const routeRegister = function(request) {
         const u = Model.new(User, form)
         if(u.validateRegister()) {
             u.save()
+            log('保存用户成功', u)
             result = `register successful <br> <pre>${Model.beautifyAll(User)}</pre>`
         } else {
             result = 'invalid username or password'
@@ -179,6 +179,58 @@ const routeProfile = function(request) {
     return r
 }
 
+const usersTemplate = function(users) {
+    let t = `<ul class="">`
+    for (const u of users) {
+        const s = `<li class=""><span class="">${u.id}</span> <span class="">${u.username}</span></li>`
+        t += s
+    }
+    t += `</ul>`
+    return t
+}
+
+const routeAdminUsers = function(request) {
+    const u = currentUser(request)
+    if (u === null || !u.isAdmin()) {
+        return redictTo('/login?reffer=admin/users')
+    }
+
+    const headers = {
+        'Content-Type': 'text/html',
+    }
+    const header = stringifiedHeader(headers)
+    let body = page('admin_users.html')
+    const users = Model.all(User)
+    const s = usersTemplate(users)
+    body = body.replace('{{users}}', s)
+    const r = header + '\r\n' + body
+    return r
+}
+
+
+const routeUpdateUser = function(request) {
+    const u = currentUser(request)
+    if (u === null || !u.isAdmin()) {
+        return redictTo('/login?reffer=admin/users')
+    }
+
+    const form = request.form()
+    // form.id = m.id
+    // form.created_time = m.created_time
+    const c = {
+        id: Number(form.id)
+    }
+    const m = Model.findBy(User, c)
+    log('找到的用户', m)
+    m.password = form.password
+    log('更新后的用户', m)
+    m.save()
+    const path = '/admin/users'
+    return redictTo(path)
+
+}
+
+
 const stringifiedHeader = function(headers, code=200) {
     let header = `HTTP/1.1 ${code} OK\r\n`
     for (const k of Object.keys(headers)) {
@@ -212,5 +264,7 @@ module.exports = {
         '/register': routeRegister,
         '/login': routeLogin,
         '/profile': routeProfile,
+        '/admin/users': routeAdminUsers,
+        '/admin/user/update': routeUpdateUser,
     }
 }

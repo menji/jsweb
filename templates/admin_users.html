@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title>Manage all users</title>
+    </head>
+    <body>
+        <h1>Manage all users</h1>
+        {{users}}
+        <form class="form-update-user" action="/admin/user/update" method="post">
+            <input type="text" name="id" placeholder="User ID">
+            <br>
+            <input type="text" name="password" placeholder="New password">
+            <br>
+            <button type="submit">Update user</button>
+        </form>
+    </body>
+</html>

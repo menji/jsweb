@@ -27,7 +27,6 @@ class Request {
         // Cookie: __ncuid=67d18f55-00d6-485d-8fed-413dcab382ae; _ga=GA1.1.800929821.1574731206; CMXID=800929821.1574731206
         const cookies = _.get(this.headers, 'Cookie', '')
         const kvs = cookies.split('; ')
-        log('cookie', kvs)
         for(const kv of kvs) {
             if(kv.includes('=')) {
                 const [k, v] = kv.split('=')
@@ -54,7 +53,8 @@ class Request {
         const lines = header
         for(const line of lines) {
             const [k, v] = line.split(': ')
-            this.headers[k] = line.slice(k.length)
+            // this.headers[k] = line.slice(k.length)
+            this.headers[k] = v
         }
 
         this.cookies = {}
@@ -145,6 +145,7 @@ const handleRequest = function(data, socket) {
 
     const header = r.split('\r\n\r\n')[0].split('\r\n').slice(1)
     request.addHeaders(header)
+
     request.body = r.split('\r\n\r\n')[1]
 
     const path = r.split(' ')[1]

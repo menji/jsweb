@@ -1,19 +1,17 @@
 [
     {
-        "username": "三扽三扽",
-        "password": "三扽三扽"
-    },
-    {
-        "username": "sdf",
-        "password": "sdfs"
-    },
-    {
+        "id": 1,
         "username": "test",
-        "password": "123"
+        "password": "123",
+        "note": "爱拼才会赢",
+        "role": 1
     },
     {
-        "username": "hy",
-        "password": "123",
-        "note": "love+you"
+        "id": 2,
+        "username": "demo",
+        "password": "888",
+        "note": "签名",
+        "role": 10,
+        "updated_time": 1579000461
     }
 ]

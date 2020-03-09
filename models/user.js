@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Model = require('./model.js')
+const _ = require('lodash')
 
 const log = function (...arg) { console.log.apply(console, arguments) }
 
@@ -7,9 +8,15 @@ const log = function (...arg) { console.log.apply(console, arguments) }
 class User extends Model {
     constructor(form) {
         super()
+        this.id = _.get(form, 'id', null)
         this.username = form.username
         this.password = form.password
         this.note = form.note
+        this.role = _.get(form, 'role', 10)
+    }
+
+    isAdmin() {
+        return this.role === 1
     }
 
     validateRegister() {
