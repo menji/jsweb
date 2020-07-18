@@ -27,7 +27,7 @@
     },
     "homepage": "https://github.com/menji/jsweb#readme",
     "dependencies": {
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.19",
         "standardx": "^5.0.0"
     }
 }
